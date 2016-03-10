@@ -1,0 +1,22 @@
+{
+  "noteid": 1,
+  "note-title": "My Note",
+  "onwer": "owner id",
+  "notes": "the notes in an html style",
+  "permissions":{
+    "Public": "is the note public for everone in campaign, if true everyone sees it",
+    "dm": "dm can see, otherwise not, only for players",
+    "players": ["which players can see it", "if blank no other players can see it"],
+    "dm-edit": true,
+    "player-edit":["list of players who can edit"]
+  }
+}
+
+sort by owner,
+maybe a second index on a campaign-note-id or something like this
+
+the owner can always edit
+
+if note title is filled out then it will be treated as a title
+
+notes are not a public entity, instead everytime notes are stored part is stored here

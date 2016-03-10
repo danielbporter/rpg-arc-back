@@ -1,0 +1,21 @@
+{
+  "userid": 0,
+  "campaignid": 0,
+  "page-count":5,
+  "color scheme":"link to css page",
+  "pages":
+  [
+    {"widgets":["widget1", "widget2"],
+      "widget-data":{
+        "widget1":{
+          "widget1 data": "data for widget1",
+          "other": "each widget will know how to process its own data"
+        }
+      },
+      "Placement":{
+        "widget1":{"placement":"Someway to reference placement"}
+      }
+    }
+
+  ]
+}
