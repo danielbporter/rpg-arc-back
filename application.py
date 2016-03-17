@@ -8,9 +8,9 @@ import decimal
 from werkzeug.local import LocalProxy
 import uuid
 
-app = Flask(__name__)
+application = Flask(__name__)
 current_user = LocalProxy(lambda: _request_ctx_stack.top.current_user)
-app.secret_key = "this is my awesome key"
+application.secret_key = "this is my awesome key"
 db = boto3.resource('dynamodb')
 
 
@@ -80,12 +80,12 @@ def get_userid(token):
     return decoded['sub']
 
 
-@app.route("/")
+@application.route("/")
 def index():
     return render_template("index.html")
 
 
-@app.route('/api/register', methods=['POST'])
+@application.route('/api/register', methods=['POST'])
 def register():
     json_data = request.get_json()
     user = {
@@ -100,7 +100,7 @@ def register():
     return jsonify({'result': status})
 
 
-@app.route('/api/campaign', methods=['POST'])
+@application.route('/api/campaign', methods=['POST'])
 @requires_auth
 def campaign():
     userid = get_userid(request.headers.get('Authorization', None).split()[1])
@@ -115,7 +115,7 @@ def campaign():
     return jsonify({'status': 'success'})
 
 
-@app.route('/api/campaign/<string:campaign_id>', methods=['GET', 'POST', 'PUT'])
+@application.route('/api/campaign/<string:campaign_id>', methods=['GET', 'POST', 'PUT'])
 def campaign_detail(campaign_id):
     table=db.Table('Campaign')
     if request.method == 'GET':
@@ -130,7 +130,7 @@ def campaign_detail(campaign_id):
         return "Campaign not found"
 
 
-@app.route('/api/user', methods=['GET','POST'])
+@application.route('/api/user', methods=['GET','POST'])
 def user():
     table = db.Table('User')
     if request.method == 'GET':
@@ -154,7 +154,7 @@ def user():
 
 
 
-@app.route('/api/user/<string:user_id>', methods=['GET', 'POST', 'PUT'])
+@application.route('/api/user/<string:user_id>', methods=['GET', 'POST', 'PUT'])
 def user_detail(user_id):
     table=db.Table('User')
     if request.method == 'GET':
@@ -168,17 +168,17 @@ def user_detail(user_id):
     except KeyError:
         return "User not found"
 
-@app.route("/ping")
+@application.route("/ping")
 # @cross_origin(headers=['Content-Type', 'Authorization'])
 def ping():
     return "All good. You don't need to be authenticated to call this"
 
 # This does need authentication
-@app.route("/api/ping", methods=['GET'])
+@application.route("/api/ping", methods=['GET'])
 # @cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
 def secured_ping():
     return jsonify({'result': "All good. You only get this message if you're authenticated"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
